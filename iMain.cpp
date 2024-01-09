@@ -68,6 +68,7 @@ void swapg()
 	for (int i = 0; i < 8; i++)
 	{
 		f[i] = s[i];
+		//bird is plotted here so we need ground here
 		if (i != 5)
 			s[i] = rand() % 8;
 	}
