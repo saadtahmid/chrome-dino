@@ -1,5 +1,8 @@
 #include <iostream>
 #include "iGraphics.h"
+#include <windows.h>
+#include <mmsystem.h>
+#pragma comment(lib,"winmm.lib")
 #include <string>
 using namespace std;
 int windowWidth = 700, windowHeight = 500;
@@ -102,6 +105,7 @@ void jumpDino()
 	else if (!jumpingUp && !jumpingDown)
 	{ // Initially in JumpingUp stage
 		jumpingUp = true;
+		PlaySound(TEXT("musics\\jump.wav"),NULL,SND_ASYNC);
 		jumpingDown = false;
 	}
 
@@ -286,7 +290,7 @@ void initDisplay()
 }
 
 void playGame()
-{
+{   
 	initialGroundPoint -= speedincrease;
 	birdx -= speedincrease; // Speed of the Background Motion.
 	if (birdx <= -810)
@@ -392,6 +396,8 @@ void iMouse(int button, int state, int mx, int my)
 		if (mx >= 317 && mx <= 370 && my >= 261 && my <= 323 && isInitDisplay)
 		{
 			isInitDisplay = false;
+			musicOn=0;
+			PlaySound(0,0,0);
 		}
 		else if (mx >= 636 && mx <= 660 && my >= 45 && my <= 70 && isInitDisplay)
 		{
@@ -413,7 +419,16 @@ void iMouse(int button, int state, int mx, int my)
 	key- holds the ASCII value of the key pressed.
 	*/
 void iKeyboard(unsigned char key)
-{
+{   
+	if(key=='m'&&(isInfoDisplay||isInitDisplay)){
+		if(musicOn){
+			musicOn=0;
+			PlaySound(0, 0, 0);
+		}else{
+			musicOn=1;
+			PlaySound(TEXT("musics\\music.wav"),NULL,SND_ASYNC);
+		}
+	}
 	if (key == ' ')
 	{
 		if (isGameOver)
@@ -486,6 +501,8 @@ int main()
 	// place your own initialization codes here.
 	iSetTimer(120, changed);
 	iSetTimer(200, scoreup);
+	if(musicOn)PlaySound(TEXT("musics\\music.wav"),NULL,SND_ASYNC);
 	iInitialize(windowWidth, windowHeight, "Chrome Dino");
+	
 	return 0;
-}
+} 	
